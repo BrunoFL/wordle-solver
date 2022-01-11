@@ -11,6 +11,8 @@ Dictionary from aspell http://aspell.net/
 
 (replace en for other language)
 
+Use only 5 letters words without '.
+
 ## Usage
 
 ```node main.js``` you need node js
@@ -20,6 +22,10 @@ Dictionary from aspell http://aspell.net/
 - \* : unknown letter
 - e+ : misplaced letter
 - u : good letter at good place
+
+`Deleted letters >`
+
+Insert yours deleted letters will remove words that contain those letters.
 
 ## Example :
 

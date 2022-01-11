@@ -10,9 +10,10 @@ const LENGTH = 5
 const data = fs.readFileSync("./dict.txt", "utf8")
 const words = data.split("\n")
 const dic = new Map()
+const deletedLetters = []
 for (const raw of words) {
     const word = raw.replace("\n", "").toUpperCase()
-    if (word.length === 5) {
+    if (word.length === 5 && !word.includes('\'')) {
         dic.set(word, word)
     }
 }
@@ -23,12 +24,24 @@ rl.on('close', function () {
     process.exit(0);
 });
 
+const updateDeleteLetters = (letters) => {
+    for (const letter of letters) {
+        deletedLetters.push(letter)
+    }
+    deletedLetters.sort().filter((value, index, array) => index === array.indexOf(value))
+    console.log(deletedLetters)
+}
+
 const search = () => {
     console.log("\n* : unknown")
     console.log("Letter : letter at good place")
-    console.log("letter+ : lettre not at right place\n")
+    console.log("Letter+ : lettre not at right place\n")
+    console.log("Letters deleted : " + deletedLetters)
     rl.question("Input : >", input => {
-        parse(input)
+        rl.question("Deleted letters : >", deleted => {
+            updateDeleteLetters(deleted)
+            parse(input)
+        })
     })
 }
 
@@ -59,6 +72,13 @@ const parse = (input) => {
                 }
             }
             realIndex++
+        }
+    }
+    for (const letter of deletedLetters) {
+        for (const word of dic.values()) {
+            if (word.includes(letter.toUpperCase())) {
+                res.delete(word)
+            }
         }
     }
     console.log("Words possibles :")
